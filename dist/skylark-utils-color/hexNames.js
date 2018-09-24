@@ -5,5 +5,5 @@
  * @link www.skylarkjs.org
  * @license MIT
  */
-define(["skylark-langx/langx","./colors","./names"],function(n,r,a){function e(n){var r={};for(var a in n)n.hasOwnProperty(a)&&(r[n[a]]=a);return r}var o=r.hexNames=e(a);return o});
+define(["skylark-langx/langx","./colors"],function(n,e){return e.hexNames});
 //# sourceMappingURL=sourcemaps/hexNames.js.map
