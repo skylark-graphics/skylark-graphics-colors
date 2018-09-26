@@ -25,7 +25,8 @@ define([
         pad2 = colors.pad2,
         convertToPercentage = colors.convertToPercentage,
         convertHexToDecimal = colors.convertHexToDecimal,
-        stringInputToObject = colors.stringInputToObject;
+        stringInputToObject = colors.stringInputToObject,
+        hexNames = colors.hexNames;
 
     var tinyCounter = 0,
         math = Math,
