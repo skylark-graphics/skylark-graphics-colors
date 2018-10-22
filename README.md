@@ -17,7 +17,7 @@ This module defines some utility functions for color manipulation and conversion
 ## Dependences
 | Project | Status | Description |
 |---------|--------|-------------|
-| [skylark-langx](https://github.com/skylarkjs/skylark-langx)   |  | Javascript language extension library |
+| [skylark-langx](https://github.com/skylarklangx/skylark-langx)   |  | Javascript language extension library |
 
 ##  Different builds
 builds are in the directory dist.
