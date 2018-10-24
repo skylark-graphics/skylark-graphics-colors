@@ -26,8 +26,8 @@ builds are in the directory dist.
 |---------|--------|-------------|
 | full | skylark-utils-color-all.js | included dependences |
 | only | skylark-utils-color.js | not included dependences |
-| full （development） | uncompressed/skylark-utils-all.js | included dependences |
-| only （development）| uncompressed/skylark-utils.js | not included dependences |
+| full （development） | uncompressed/skylark-utils-color-all.js | included dependences |
+| only （development）| uncompressed/skylark-utils-color.js | not included dependences |
 
 Please use the "full" version when using this library alone, and use the "only" version when using other skylark libraries.
 
