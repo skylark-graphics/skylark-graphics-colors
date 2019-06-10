@@ -1,7 +1,7 @@
-# Skylark Color utility
+# The skylark color data type library.
 
 <!--version-->
-[skylark-utils-color](https://github.com/skylarkutils/skylark-utils-color/) is a color manipulation and conversion utility library  for html5 application development using skylark.
+[skylark-data-color](https://github.com/skylark-data/skylark-data-color/) is a color manipulation and conversion utility library  for html5 application development using skylark.
 
 Based on: https://github.com/bgrins/TinyColor
 
@@ -24,51 +24,51 @@ builds are in the directory dist.
 
 |  | build | Description |
 |---------|--------|-------------|
-| full | skylark-utils-color-all.js | included dependences |
-| only | skylark-utils-color.js | not included dependences |
-| full （development） | uncompressed/skylark-utils-color-all.js | included dependences |
-| only （development）| uncompressed/skylark-utils-color.js | not included dependences |
+| full | skylark-data-color-all.js | included dependences |
+| only | skylark-data-color.js | not included dependences |
+| full （development） | uncompressed/skylark-data-color-all.js | included dependences |
+| only （development）| uncompressed/skylark-data-color.js | not included dependences |
 
 Please use the "full" version when using this library alone, and use the "only" version when using other skylark libraries.
 
 ## Installation
 You can get the latest version in many different ways:
 
-- Downloading [a ZIP file from master](https://github.com/skylarkutils/skylark-utils-color/archive/master.zip)
-- Cloning using Git: `git clone https://github.com/skylarkutils/skylark-utils-color.git`
-- Installing via NPM: `npm install https://github.com/skylarkutils/skylark-utils-color.git#master --save`
+- Downloading [a ZIP file from master](https://github.com/skylarkutils/skylark-data-color/archive/master.zip)
+- Cloning using Git: `git clone https://github.com/skylarkutils/skylark-data-color.git`
+- Installing via NPM: `npm install https://github.com/skylarkutils/skylark-data-color.git#master --save`
 
 
 ## Usage
 
-- Using the skylark-utils-color library for a AMD module.  
+- Using the skylark-data-color library for a AMD module.  
 ```js
 require({
   'paths': {
-     'skylark-utils-color': '{location}/skylark-utils-color-all' 
+     'skylark-data-color': '{location}/skylark-data-color-all' 
   }
-}, ['skylark-utils-color'], function(ucolors) {
+}, ['skylark-data-color'], function(ucolors) {
 	var color = new ucolors.Color("red");
 	color.toHsl(); // { h: 0, s: 1, l: 0.5, a: 1 }  
 });
 ```
 
-- Using the skylark-utils-color library for a global object named skylarkjs.  
+- Using the skylark-data-color library for a global object named skylarkjs.  
 ```js
-<script type="text/javascript" src="{location}/skylark-utils-color-all.js"></script>
+<script type="text/javascript" src="{location}/skylark-data-color-all.js"></script>
 <script>
 	var color = new skylarkjs.colors.Color("red");
 	color.toHsl(); // { h: 0, s: 1, l: 0.5, a: 1 }  
 </script>
 ```
 
-- Using the skylark-utils-color library for a AMD package.  
+- Using the skylark-data-color library for a AMD package.  
 ```js
 require({
   'packages': [
-    { 'name': 'skylark-utils-color', 'location': '{location}/skylark-utils-color/' }
+    { 'name': 'skylark-data-color', 'location': '{location}/skylark-data-color/' }
   ]
-}, ['skylark-utils-color/Color'], function(Color) {
+}, ['skylark-data-color/Color'], function(Color) {
 	var color = new Color("red");
 	color.toHsl(); // { h: 0, s: 1, l: 0.5, a: 1 }  
 });

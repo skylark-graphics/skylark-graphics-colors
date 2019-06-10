@@ -1,5 +1,5 @@
 {
-  "name": "skylark-utils-color",
+  "name": "skylark-data-color",
   "version": "0.9.0",
   "description": "The skylark color utility library.",
   "main": "-",
@@ -10,7 +10,7 @@
   "homepage": "www.skylarkjs.org",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/skylarkjs/skylark-utils-color.git"
+    "url": "git+https://github.com/skylarkjs/skylark-data-color.git"
   },
   "keywords": [
     "skylark",

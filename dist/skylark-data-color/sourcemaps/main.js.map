@@ -1,0 +1,1 @@
+{"version":3,"sources":["main.js"],"names":["define","colors"],"mappings":";;;;;;;AAAAA,QACI,WACA,UACA,aACA,WACD,SAASC,GAEX,OAAOA","file":"../main.js","sourcesContent":["define([\r\n    \"./colors\",\r\n    \"./Color\",\r\n    \"./hexNames\",\r\n    \"./names\"\r\n], function(colors) {\r\n\r\n\treturn colors;\r\n});"]}

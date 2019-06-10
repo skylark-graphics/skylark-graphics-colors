@@ -1,5 +1,5 @@
 /**
- * skylark-utils-color - The skylark color utility library.
+ * skylark-data-color - The skylark color utility library.
  * @author Hudaokeji Co.,Ltd
  * @version v0.9.0
  * @link www.skylarkjs.org

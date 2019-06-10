@@ -1,5 +1,5 @@
 /**
- * skylark-utils-color - The skylark color utility library.
+ * skylark-data-color - The skylark color utility library.
  * @author Hudaokeji Co.,Ltd
  * @version v0.9.0
  * @link www.skylarkjs.org
@@ -37,11 +37,16 @@
                 deps: deps.map(function(dep){
                   return absolute(dep,id);
                 }),
+                resolved: false,
                 exports: null
             };
             require(id);
         } else {
-            map[id] = factory;
+            map[id] = {
+                factory : null,
+                resolved : true,
+                exports : factory
+            };
         }
     };
     require = globals.require = function(id) {
@@ -49,14 +54,15 @@
             throw new Error('Module ' + id + ' has not been defined');
         }
         var module = map[id];
-        if (!module.exports) {
+        if (!module.resolved) {
             var args = [];
 
             module.deps.forEach(function(dep){
                 args.push(require(dep));
             })
 
-            module.exports = module.factory.apply(window, args);
+            module.exports = module.factory.apply(globals, args) || null;
+            module.resolved = true;
         }
         return module.exports;
     };
@@ -72,7 +78,7 @@
     var skylarkjs = require("skylark-langx/skylark");
 
     if (isCmd) {
-      exports = skylarkjs;
+      module.exports = skylarkjs;
     } else {
       globals.skylarkjs  = skylarkjs;
     }
@@ -80,7 +86,7 @@
 
 })(function(define,require) {
 
-define('skylark-utils-color/colors',[
+define('skylark-data-color/colors',[
     "skylark-langx/skylark",
     "skylark-langx/langx"
 ],function(skylark,langx) {
@@ -715,7 +721,7 @@ define('skylark-utils-color/colors',[
 
 });
 
-define('skylark-utils-color/Color',[
+define('skylark-data-color/Color',[
     "skylark-langx/langx",
     "./colors"
 ],function(langx,colors) {
@@ -1256,7 +1262,7 @@ define('skylark-utils-color/Color',[
 	return Color;
 });
 
- define('skylark-utils-color/hexNames',[
+ define('skylark-data-color/hexNames',[
     "skylark-langx/langx",
     "./colors"
 ],function(langx,colors) {
@@ -1266,7 +1272,7 @@ define('skylark-utils-color/Color',[
 });
 
 
- define('skylark-utils-color/names',[
+ define('skylark-data-color/names',[
     "skylark-langx/langx",
     "./colors"
 ],function(langx,colors) {
@@ -1276,7 +1282,7 @@ define('skylark-utils-color/Color',[
 });
 
 
-define('skylark-utils-color/main',[
+define('skylark-data-color/main',[
     "./colors",
     "./Color",
     "./hexNames",
@@ -1285,7 +1291,8 @@ define('skylark-utils-color/main',[
 
 	return colors;
 });
-define('skylark-utils-color', ['skylark-utils-color/main'], function (main) { return main; });
+define('skylark-data-color', ['skylark-data-color/main'], function (main) { return main; });
 
 
 },this);
+//# sourceMappingURL=sourcemaps/skylark-data-color.js.map
