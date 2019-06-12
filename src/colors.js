@@ -629,6 +629,6 @@ define([
 
     });
 
-    return colors;
+    return skylark.attach("data.colors",colors);
 
 });

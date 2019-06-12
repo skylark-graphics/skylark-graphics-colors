@@ -4362,7 +4362,7 @@ define('skylark-data-color/colors',[
 
     });
 
-    return colors;
+    return skylark.attach("data.colors",colors);
 
 });
 
