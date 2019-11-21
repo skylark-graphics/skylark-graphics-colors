@@ -24,7 +24,7 @@
   "license": "MIT",
   "bugs": "https://github.com/skylarkjs/skylark/issues",
   "devDependencies": {
-    "skylark-langx": "https://github.com/skylarklangx/skylark-langx#master"
+    "skylark-langx": "https://github.com/skylark-langx/skylark-langx#master"
   },
   "engines": {
     "node": ">=0.8.0"
