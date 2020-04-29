@@ -75,7 +75,7 @@
   factory(define,require);
 
   if (!isAmd) {
-    var skylarkjs = require("skylark-langx/skylark");
+    var skylarkjs = require("skylark-langx-ns");
 
     if (isCmd) {
       module.exports = skylarkjs;
@@ -702,6 +702,7 @@ define('skylark-data-color/colors',[
         rgbToHsl : rgbToHsl,
         hslToRgb : hslToRgb,
         rgbToHsv : rgbToHsv,
+        hsvToRgb : hsvToRgb,
         rgbToHex : rgbToHex,
         rgbaToHex : rgbaToHex,
         boundAlpha : boundAlpha,

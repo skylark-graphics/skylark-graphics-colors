@@ -614,6 +614,7 @@ define([
         rgbToHsl : rgbToHsl,
         hslToRgb : hslToRgb,
         rgbToHsv : rgbToHsv,
+        hsvToRgb : hsvToRgb,
         rgbToHex : rgbToHex,
         rgbaToHex : rgbaToHex,
         boundAlpha : boundAlpha,
