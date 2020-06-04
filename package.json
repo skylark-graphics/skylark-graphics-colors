@@ -26,6 +26,7 @@
   "dependencies": {
     "skylark-langx-types": "https://github.com/skylark-langx/skylark-langx-types#master",
     "skylark-langx-klass": "https://github.com/skylark-langx/skylark-langx-klass#master",
+    "skylark-langx-strings": "https://github.com/skylark-langx/skylark-langx-strings#master",
     "skylark-langx-ns": "https://github.com/skylark-langx/skylark-langx-ns#master"
   },
   "engines": {

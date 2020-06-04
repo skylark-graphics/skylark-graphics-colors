@@ -7,7 +7,7 @@ define([
     "./_conversion"
 ],function(
     skylark,
-    langx,
+    types,
     klass,
     names,
     hexNames,

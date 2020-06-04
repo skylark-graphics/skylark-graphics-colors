@@ -3,7 +3,7 @@ define([
     "./named",
     "./misc",
     "./parse"
-], function(colors) {
+], function(Color) {
 
 	return Color;
 });

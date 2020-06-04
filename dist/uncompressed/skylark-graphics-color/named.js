@@ -1,11 +1,16 @@
 define([
 	"./Color",
-	"./_names"
-],function(Color,_names){
+	"./_names",
+	"./parse"
+],function(
+	Color,
+	parse,
+	_names
+){
 	var named = {};
 
 	for (var name in _names) {
-		named[name] = new Color(_names[name]);
+		named[name] = Color.parse(_names[name]);
 	}
 
 	return Color.named = named;

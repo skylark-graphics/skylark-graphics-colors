@@ -1,6 +1,10 @@
 define([
+    "skylark-langx-strings",
     "./Color"
-],function(Color){
+],function(
+    strings,
+    Color
+){
     var matchers = (function() {
 
         // <http://www.w3.org/TR/css3-values/#integers>
@@ -60,9 +64,9 @@ define([
     // `stringInputToObject`
     // Permissive string parsing.  Take in a number of formats, and output an object
     // based on detected format.  Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}`
-    function stringInputToObject(color) {
+    function parse(color) {
 
-        color = color.replace(trimLeft,'').replace(trimRight, '').toLowerCase();
+        color = strings.trim(color).toLowerCase();
         var named = false;
         if (names[color]) {
             color = names[color];

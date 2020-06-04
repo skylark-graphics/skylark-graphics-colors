@@ -5,5 +5,5 @@
  * @link www.skylarkjs.org
  * @license MIT
  */
-define(["./Color","./_names"],function(n,e){var r={};for(var a in e)r[a]=new n(e[a]);return n.named=r});
+define(["./Color","./_names","./parse"],function(r,e,n){var a={};for(var o in n)a[o]=r.parse(n[o]);return r.named=a});
 //# sourceMappingURL=sourcemaps/named.js.map
