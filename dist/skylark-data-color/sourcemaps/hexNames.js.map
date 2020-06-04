@@ -1,1 +1,0 @@
-{"version":3,"sources":["hexNames.js"],"names":["define","langx","colors","hexNames"],"mappings":";;;;;;;AAACA,QACG,sBACA,YACF,SAASC,EAAMC,GAEb,OAAOA,EAAOC","file":"../hexNames.js","sourcesContent":[" define([\r\n    \"skylark-langx/langx\",\r\n    \"./colors\"\r\n],function(langx,colors) {\r\n\r\n    return colors.hexNames;\r\n\r\n});\r\n\r\n"]}

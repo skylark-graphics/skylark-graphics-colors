@@ -1,1 +1,0 @@
-{"version":3,"sources":["names.js"],"names":["define","langx","colors","names"],"mappings":";;;;;;;AAACA,QACG,sBACA,YACF,SAASC,EAAMC,GAEb,OAAOA,EAAOC","file":"../names.js","sourcesContent":[" define([\r\n    \"skylark-langx/langx\",\r\n    \"./colors\"\r\n],function(langx,colors) {\r\n\r\n    return colors.names;\r\n\r\n});\r\n\r\n"]}
