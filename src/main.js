@@ -4,6 +4,5 @@ define([
     "./misc",
     "./parse"
 ], function(Color) {
-
 	return Color;
 });

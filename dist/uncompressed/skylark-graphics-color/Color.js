@@ -435,6 +435,10 @@ define([
 
             return new Color(rgba);
 
+        },
+
+        isValid : function(){
+            return true;
         }
 	});
 
@@ -442,9 +446,13 @@ define([
     // Can be called with any Color input
     Color.equals = function (color1, color2) {
         if (!color1 || !color2) { return false; }
+        color1 = Color.parse(color1);
+        color2 = Color.parse(color2);
+
         return color1.toRgbString() == color2.toRgbString();
     };
     
+
     Color.random = function() {
         return Color.fromRatio({
             r: mathRandom(),
@@ -470,12 +478,12 @@ define([
         })  
     };
 
-    Color.fromHsl = function(h,s,l) {
+    Color.fromHsl = function(h,s,l,a) {
         var rgb = conversion.hslToRgb(h,s,l)
         return new Color(rgb)  
     };
 
-    Color.fromHsv = function(h,s,v) {
+    Color.fromHsv = function(h,s,v,a) {
         var rgb = conversion.hsvToRgb(h,s,v)
         return new Color(rgb)  
     }; 

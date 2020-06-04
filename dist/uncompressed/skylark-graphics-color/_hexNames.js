@@ -1,7 +1,6 @@
  define([
     "./_names"
 ],function(names) {
-
     // Utilities
     // ---------
 

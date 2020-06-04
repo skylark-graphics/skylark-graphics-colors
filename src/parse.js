@@ -1,10 +1,20 @@
 define([
     "skylark-langx-strings",
-    "./Color"
+    "./Color",
+    "./_names",
+    "./_conversion"
 ],function(
     strings,
-    Color
+    Color,
+    names,
+    conversion
 ){
+    var math = Math,
+        mathRound = math.round,
+        mathMin = math.min,
+        mathMax = math.max,
+        mathRandom = math.random;
+
     var matchers = (function() {
 
         // <http://www.w3.org/TR/css3-values/#integers>
@@ -31,7 +41,10 @@ define([
             hsva: new RegExp("hsva" + PERMISSIVE_MATCH4),
             hex3: /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
             hex6: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
-            hex8: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
+            hex8: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
+            hex3s: /^#([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
+            hex6s: /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
+            hex8s: /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
         };
     })();
 
@@ -64,7 +77,7 @@ define([
     // `stringInputToObject`
     // Permissive string parsing.  Take in a number of formats, and output an object
     // based on detected format.  Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}`
-    function parse(color) {
+    function stringInputToObject(color) {
 
         color = strings.trim(color).toLowerCase();
         var named = false;
@@ -99,7 +112,7 @@ define([
         if ((match = matchers.hsva.exec(color))) {
             return { h: match[1], s: match[2], v: match[3], a: match[4] };
         }
-        if ((match = matchers.hex8.exec(color))) {
+        if ((match = matchers.hex8.exec(color)) || (match = matchers.hex8s.exec(color))) {
             return {
                 a: convertHexToDecimal(match[1]),
                 r: parseIntFromHex(match[2]),
@@ -108,7 +121,7 @@ define([
                 format: named ? "name" : "hex8"
             };
         }
-        if ((match = matchers.hex6.exec(color))) {
+        if ((match = matchers.hex6.exec(color)) || (match = matchers.hex6s.exec(color))) {
             return {
                 r: parseIntFromHex(match[1]),
                 g: parseIntFromHex(match[2]),
@@ -116,7 +129,7 @@ define([
                 format: named ? "name" : "hex"
             };
         }
-        if ((match = matchers.hex3.exec(color))) {
+        if ((match = matchers.hex3.exec(color)) || (match = matchers.hex3s.exec(color))) {
             return {
                 r: parseIntFromHex(match[1] + '' + match[1]),
                 g: parseIntFromHex(match[2] + '' + match[2]),
@@ -143,7 +156,10 @@ define([
     //     "hsla(0, 100%, 50%, 1)" or "hsla 0 100% 50%, 1"
     //     "hsv(0, 100%, 100%)" or "hsv 0 100% 100%"
     //
-    function inputToRGB(color) {
+    function parse(color) {
+        if (color instanceof Color) {
+            return color;
+        }
 
         var rgb = { r: 0, g: 0, b: 0 };
         var a = 1;
@@ -156,21 +172,21 @@ define([
 
         if (typeof color == "object") {
             if (color.hasOwnProperty("r") && color.hasOwnProperty("g") && color.hasOwnProperty("b")) {
-                rgb = rgbToRgb(color.r, color.g, color.b);
+                rgb = conversion.rgbToRgb(color.r, color.g, color.b);
                 ok = true;
                 format = String(color.r).substr(-1) === "%" ? "prgb" : "rgb";
             }
             else if (color.hasOwnProperty("h") && color.hasOwnProperty("s") && color.hasOwnProperty("v")) {
-                color.s = colors.convertToPercentage(color.s);
-                color.v = colors.convertToPercentage(color.v);
-                rgb = hsvToRgb(color.h, color.s, color.v);
+                color.s = convertToPercentage(color.s);
+                color.v = convertToPercentage(color.v);
+                rgb = conversion.hsvToRgb(color.h, color.s, color.v);
                 ok = true;
                 format = "hsv";
             }
             else if (color.hasOwnProperty("h") && color.hasOwnProperty("s") && color.hasOwnProperty("l")) {
-                color.s = colors.convertToPercentage(color.s);
-                color.l = colors.convertToPercentage(color.l);
-                rgb = hslToRgb(color.h, color.s, color.l);
+                color.s = convertToPercentage(color.s);
+                color.l = convertToPercentage(color.l);
+                rgb =  conversion.hslToRgb(color.h, color.s, color.l);
                 ok = true;
                 format = "hsl";
             }

@@ -1,7 +1,12 @@
 define([
-
 ],function(
 ){
+    var math = Math,
+        mathRound = math.round,
+        mathMin = math.min,
+        mathMax = math.max,
+        mathRandom = math.random;
+            
     // Force a hex value to have 2 characters
     function pad2(c) {
         return c.length == 1 ? '0' + c : '' + c;
@@ -225,6 +230,7 @@ define([
 
 	return  {
 		bound01,
+        rgbToRgb,
 		rgbToHsl,
 		hslToRgb,
 		rgbToHsv,

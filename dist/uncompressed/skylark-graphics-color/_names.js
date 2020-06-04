@@ -1,6 +1,5 @@
  define([
 ],function() {
-
      // Big List of Colors
     // ------------------
     // <http://www.w3.org/TR/css3-color/#svg-color>

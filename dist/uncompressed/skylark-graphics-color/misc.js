@@ -6,7 +6,6 @@ define([
     // Utility Functions
     // ---------------------
 
-
     // Readability Functions
     // ---------------------
     // <http://www.w3.org/TR/AERT#color-contrast>
