@@ -694,7 +694,7 @@ define('skylark-graphics-color/Color',[
                 return false;
             }
 
-            return hexNames[rgbToHex(this._r, this._g, this._b, true)] || false;
+            return hexNames[conversion.rgbToHex(this._r, this._g, this._b, true)] || false;
         },
 
         toFilter: function(secondColor) {
