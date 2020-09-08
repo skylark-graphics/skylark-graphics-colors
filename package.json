@@ -1,5 +1,5 @@
 {
-  "name": "skylark-graphics-color",
+  "name": "skylark-graphics-colors",
   "version": "0.9.0",
   "description": "The skylark color utility library.",
   "main": "-",
@@ -10,7 +10,7 @@
   "homepage": "www.skylarkjs.org",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/skylark-graphics/skylark-graphics-color.git"
+    "url": "git+https://github.com/skylark-graphics/skylark-graphics-colors.git"
   },
   "keywords": [
     "skylark",

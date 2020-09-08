@@ -2,6 +2,7 @@ define([
     "skylark-langx-ns",
     "skylark-langx-types",
     "skylark-langx-klass",
+    "./colors",
     "./_names",
     "./_hexNames",
     "./_conversion"
@@ -9,6 +10,7 @@ define([
     skylark,
     types,
     klass,
+    colors,
     names,
     hexNames,
     conversion
@@ -35,34 +37,34 @@ define([
         return mathMin(1, mathMax(0, val));
     }
          
-	var Color = klass({
-		init : function(rgb, opts) {
-    	    opts = opts || { };
+    var Color = klass({
+        init : function(rgb, opts) {
+            opts = opts || { };
 
-	        //var rgb = inputToRGB(color);
+            //var rgb = inputToRGB(color);
             //
-	        //this._originalInput = color,
+            //this._originalInput = color,
             if (types.isString(rgb)) {
                 rgb= conversion.hexToRgb(rgb);
             }
-	        this._r = rgb.r,
-	        this._g = rgb.g,
-	        this._b = rgb.b,
-	        this._a = types.isDefined(rgb.a) ? rgb.a : 1,
+            this._r = rgb.r,
+            this._g = rgb.g,
+            this._b = rgb.b,
+            this._a = types.isDefined(rgb.a) ? rgb.a : 1,
 
-	        this._roundA = mathRound(1000 * this._a) / 1000,
-	        this._format = opts.format || rgb.format;
-	        this._gradientType = opts.gradientType;
+            this._roundA = mathRound(1000 * this._a) / 1000,
+            this._format = opts.format || rgb.format;
+            this._gradientType = opts.gradientType;
 
-	        // Don't let the range of [0,255] come back in [0,1].
-	        // Potentially lose a little bit of precision here, but will fix issues where
-	        // .5 gets interpreted as half of the total, instead of half of 1
-	        // If it was supposed to be 128, this was already taken care of by `inputToRgb`
-	        if (this._r < 1) { this._r = mathRound(this._r); }
-	        if (this._g < 1) { this._g = mathRound(this._g); }
-	        if (this._b < 1) { this._b = mathRound(this._b); }
+            // Don't let the range of [0,255] come back in [0,1].
+            // Potentially lose a little bit of precision here, but will fix issues where
+            // .5 gets interpreted as half of the total, instead of half of 1
+            // If it was supposed to be 128, this was already taken care of by `inputToRgb`
+            if (this._r < 1) { this._r = mathRound(this._r); }
+            if (this._g < 1) { this._g = mathRound(this._g); }
+            if (this._b < 1) { this._b = mathRound(this._b); }
 
-	    },
+        },
 
         /*
          * Return a boolean indicating whether the color's perceived brightness is dark.
@@ -196,6 +198,10 @@ define([
             }
 
             return "progid:DXImageTransform.Microsoft.gradient("+gradientType+"startColorstr="+hex8String+",endColorstr="+secondHex8String+")";
+        },
+
+        toNumber : function() {
+            return (this._r << 16 ^ this._g << 8 ^ this._b << 0);
         },
 
         toString: function(format) {
@@ -440,7 +446,7 @@ define([
         isValid : function(){
             return true;
         }
-	});
+    });
 
     // `equals`
     // Can be called with any Color input
@@ -488,5 +494,5 @@ define([
         return new Color(rgb)  
     }; 
 
-    return skylark.attach("graphics.Color",Color);
+    return colors.Color = Color;
 });

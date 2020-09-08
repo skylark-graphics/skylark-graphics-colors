@@ -1,8 +1,9 @@
 define([
+	"./colors",
     "./Color",
     "./named",
     "./misc",
     "./parse"
-], function(Color) {
-	return Color;
+], function(colors) {
+	return colors;
 });

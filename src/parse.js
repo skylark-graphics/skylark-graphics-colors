@@ -1,10 +1,12 @@
 define([
     "skylark-langx-strings",
+    "./colors",
     "./Color",
     "./_names",
     "./_conversion"
 ],function(
     strings,
+    colors,
     Color,
     names,
     conversion
@@ -235,6 +237,6 @@ define([
     };
     */
 
-    return Color.parse = parse;
+    return colors.parse = Color.parse = parse;
 	
 });
