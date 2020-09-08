@@ -1,5 +1,4 @@
 define([
-    "skylark-langx-ns",
     "skylark-langx-types",
     "skylark-langx-klass",
     "./colors",
@@ -7,7 +6,6 @@ define([
     "./_hexNames",
     "./_conversion"
 ],function(
-    skylark,
     types,
     klass,
     colors,

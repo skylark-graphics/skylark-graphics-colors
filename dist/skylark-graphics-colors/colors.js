@@ -5,5 +5,5 @@
  * @link www.skylarkjs.org
  * @license MIT
  */
-define(["skylark-langx/skylark"],function(a){return a.attach("graphics.colors",{})});
+define(["skylark-langx-ns"],function(n){return n.attach("graphics.colors",{})});
 //# sourceMappingURL=sourcemaps/colors.js.map
