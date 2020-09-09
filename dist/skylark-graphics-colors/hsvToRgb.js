@@ -5,5 +5,5 @@
  * @link www.skylarkjs.org
  * @license MIT
  */
-define(["./colors","./Color","./named"],function(n){return n});
-//# sourceMappingURL=sourcemaps/main.js.map
+define(["./colors","./_conversion"],function(o,n){return o.hsvToRgb=n.hsvToRgb});
+//# sourceMappingURL=sourcemaps/hsvToRgb.js.map

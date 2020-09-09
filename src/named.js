@@ -1,7 +1,7 @@
 define([
+	"./colors",
 	"./Color",
-	"./_names",
-	"./parse"
+	"./_names"
 ],function(
 	Color,
 	parse,
@@ -13,5 +13,5 @@ define([
 		named[name] = Color.parse(_names[name]);
 	}
 
-	return Color.named = named;
+	return colors.named = named;
 });

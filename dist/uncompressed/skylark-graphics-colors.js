@@ -90,7 +90,6 @@ define('skylark-graphics-colors/colors',[
 	"skylark-langx-ns"
 ],function(skylark){
 	return skylark.attach("graphics.colors",{});
-	
 });
  define('skylark-graphics-colors/_names',[
 ],function() {
@@ -275,7 +274,11 @@ define('skylark-graphics-colors/colors',[
 
 
 define('skylark-graphics-colors/_conversion',[
+    "skylark-langx-strings",
+    "./_names"
 ],function(
+    strings,
+    names
 ){
     var math = Math,
         mathRound = math.round,
@@ -504,6 +507,126 @@ define('skylark-graphics-colors/_conversion',[
 	  } : null;
 	}
 
+
+    var matchers = (function() {
+
+        // <http://www.w3.org/TR/css3-values/#integers>
+        var CSS_INTEGER = "[-\\+]?\\d+%?";
+
+        // <http://www.w3.org/TR/css3-values/#number-value>
+        var CSS_NUMBER = "[-\\+]?\\d*\\.\\d+%?";
+
+        // Allow positive/negative integer/number.  Don't capture the either/or, just the entire outcome.
+        var CSS_UNIT = "(?:" + CSS_NUMBER + ")|(?:" + CSS_INTEGER + ")";
+
+        // Actual matching.
+        // Parentheses and commas are optional, but not required.
+        // Whitespace can take the place of commas or opening paren
+        var PERMISSIVE_MATCH3 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
+        var PERMISSIVE_MATCH4 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
+
+        return {
+            rgb: new RegExp("rgb" + PERMISSIVE_MATCH3),
+            rgba: new RegExp("rgba" + PERMISSIVE_MATCH4),
+            hsl: new RegExp("hsl" + PERMISSIVE_MATCH3),
+            hsla: new RegExp("hsla" + PERMISSIVE_MATCH4),
+            hsv: new RegExp("hsv" + PERMISSIVE_MATCH3),
+            hsva: new RegExp("hsva" + PERMISSIVE_MATCH4),
+            hex3: /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
+            hex6: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
+            hex8: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
+            hex3s: /^#([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
+            hex6s: /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
+            hex8s: /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
+        };
+    })();
+
+
+
+    // Parse a base-16 hex value into a base-10 integer
+    function parseIntFromHex(val) {
+        return parseInt(val, 16);
+    }
+        
+
+      // Converts a decimal to a hex value
+    function convertDecimalToHex(d) {
+        return Math.round(parseFloat(d) * 255).toString(16);
+    }
+
+    // Converts a hex value to a decimal
+    function convertHexToDecimal(h) {
+        return (parseIntFromHex(h) / 255);
+    }
+          
+    // `stringInputToObject`
+    // Permissive string parsing.  Take in a number of formats, and output an object
+    // based on detected format.  Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}`
+    function strToRgb(color) {
+
+        color = strings.trim(color).toLowerCase();
+        var named = false;
+        if (names[color]) {
+            color = names[color];
+            named = true;
+        }
+        else if (color == 'transparent') {
+            return { r: 0, g: 0, b: 0, a: 0, format: "name" };
+        }
+
+        // Try to match string input using regular expressions.
+        // Keep most of the number bounding out of this function - don't worry about [0,1] or [0,100] or [0,360]
+        // Just return an object and let the conversion functions handle that.
+        // This way the result will be the same whether the tinycolor is initialized with string or object.
+        var match;
+        if ((match = matchers.rgb.exec(color))) {
+            return { r: match[1], g: match[2], b: match[3] };
+        }
+        if ((match = matchers.rgba.exec(color))) {
+            return { r: match[1], g: match[2], b: match[3], a: match[4] };
+        }
+        if ((match = matchers.hsl.exec(color))) {
+            return { h: match[1], s: match[2], l: match[3] };
+        }
+        if ((match = matchers.hsla.exec(color))) {
+            return { h: match[1], s: match[2], l: match[3], a: match[4] };
+        }
+        if ((match = matchers.hsv.exec(color))) {
+            return { h: match[1], s: match[2], v: match[3] };
+        }
+        if ((match = matchers.hsva.exec(color))) {
+            return { h: match[1], s: match[2], v: match[3], a: match[4] };
+        }
+        if ((match = matchers.hex8.exec(color)) || (match = matchers.hex8s.exec(color))) {
+            return {
+                a: convertHexToDecimal(match[1]),
+                r: parseIntFromHex(match[2]),
+                g: parseIntFromHex(match[3]),
+                b: parseIntFromHex(match[4]),
+                format: named ? "name" : "hex8"
+            };
+        }
+        if ((match = matchers.hex6.exec(color)) || (match = matchers.hex6s.exec(color))) {
+            return {
+                r: parseIntFromHex(match[1]),
+                g: parseIntFromHex(match[2]),
+                b: parseIntFromHex(match[3]),
+                format: named ? "name" : "hex"
+            };
+        }
+        if ((match = matchers.hex3.exec(color)) || (match = matchers.hex3s.exec(color))) {
+            return {
+                r: parseIntFromHex(match[1] + '' + match[1]),
+                g: parseIntFromHex(match[2] + '' + match[2]),
+                b: parseIntFromHex(match[3] + '' + match[3]),
+                format: named ? "name" : "hex"
+            };
+        }
+
+        return false;
+    }
+
+
 	return  {
 		bound01,
         rgbToRgb,
@@ -513,7 +636,8 @@ define('skylark-graphics-colors/_conversion',[
 		hsvToRgb,
 		rgbToHex,
 		rgbaToHex,
-		hexToRgb
+		hexToRgb,
+        strToRgb
 	};
 });
 define('skylark-graphics-colors/Color',[
@@ -1010,62 +1134,6 @@ define('skylark-graphics-colors/Color',[
         return new Color(rgb)  
     }; 
 
-    return colors.Color = Color;
-});
-
-define('skylark-graphics-colors/parse',[
-    "skylark-langx-strings",
-    "./colors",
-    "./Color",
-    "./_names",
-    "./_conversion"
-],function(
-    strings,
-    colors,
-    Color,
-    names,
-    conversion
-){
-    var math = Math,
-        mathRound = math.round,
-        mathMin = math.min,
-        mathMax = math.max,
-        mathRandom = math.random;
-
-    var matchers = (function() {
-
-        // <http://www.w3.org/TR/css3-values/#integers>
-        var CSS_INTEGER = "[-\\+]?\\d+%?";
-
-        // <http://www.w3.org/TR/css3-values/#number-value>
-        var CSS_NUMBER = "[-\\+]?\\d*\\.\\d+%?";
-
-        // Allow positive/negative integer/number.  Don't capture the either/or, just the entire outcome.
-        var CSS_UNIT = "(?:" + CSS_NUMBER + ")|(?:" + CSS_INTEGER + ")";
-
-        // Actual matching.
-        // Parentheses and commas are optional, but not required.
-        // Whitespace can take the place of commas or opening paren
-        var PERMISSIVE_MATCH3 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
-        var PERMISSIVE_MATCH4 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
-
-        return {
-            rgb: new RegExp("rgb" + PERMISSIVE_MATCH3),
-            rgba: new RegExp("rgba" + PERMISSIVE_MATCH4),
-            hsl: new RegExp("hsl" + PERMISSIVE_MATCH3),
-            hsla: new RegExp("hsla" + PERMISSIVE_MATCH4),
-            hsv: new RegExp("hsv" + PERMISSIVE_MATCH3),
-            hsva: new RegExp("hsva" + PERMISSIVE_MATCH4),
-            hex3: /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
-            hex6: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
-            hex8: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
-            hex3s: /^#([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
-            hex6s: /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
-            hex8s: /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
-        };
-    })();
-
-
     // Replace a decimal with it's percentage value
     function convertToPercentage(n) {
         if (n <= 1) {
@@ -1073,89 +1141,6 @@ define('skylark-graphics-colors/parse',[
         }
 
         return n;
-    }
-
-    // Parse a base-16 hex value into a base-10 integer
-    function parseIntFromHex(val) {
-        return parseInt(val, 16);
-    }
-        
-
-      // Converts a decimal to a hex value
-    function convertDecimalToHex(d) {
-        return Math.round(parseFloat(d) * 255).toString(16);
-    }
-
-    // Converts a hex value to a decimal
-    function convertHexToDecimal(h) {
-        return (parseIntFromHex(h) / 255);
-    }
-          
-    // `stringInputToObject`
-    // Permissive string parsing.  Take in a number of formats, and output an object
-    // based on detected format.  Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}`
-    function stringInputToObject(color) {
-
-        color = strings.trim(color).toLowerCase();
-        var named = false;
-        if (names[color]) {
-            color = names[color];
-            named = true;
-        }
-        else if (color == 'transparent') {
-            return { r: 0, g: 0, b: 0, a: 0, format: "name" };
-        }
-
-        // Try to match string input using regular expressions.
-        // Keep most of the number bounding out of this function - don't worry about [0,1] or [0,100] or [0,360]
-        // Just return an object and let the conversion functions handle that.
-        // This way the result will be the same whether the tinycolor is initialized with string or object.
-        var match;
-        if ((match = matchers.rgb.exec(color))) {
-            return { r: match[1], g: match[2], b: match[3] };
-        }
-        if ((match = matchers.rgba.exec(color))) {
-            return { r: match[1], g: match[2], b: match[3], a: match[4] };
-        }
-        if ((match = matchers.hsl.exec(color))) {
-            return { h: match[1], s: match[2], l: match[3] };
-        }
-        if ((match = matchers.hsla.exec(color))) {
-            return { h: match[1], s: match[2], l: match[3], a: match[4] };
-        }
-        if ((match = matchers.hsv.exec(color))) {
-            return { h: match[1], s: match[2], v: match[3] };
-        }
-        if ((match = matchers.hsva.exec(color))) {
-            return { h: match[1], s: match[2], v: match[3], a: match[4] };
-        }
-        if ((match = matchers.hex8.exec(color)) || (match = matchers.hex8s.exec(color))) {
-            return {
-                a: convertHexToDecimal(match[1]),
-                r: parseIntFromHex(match[2]),
-                g: parseIntFromHex(match[3]),
-                b: parseIntFromHex(match[4]),
-                format: named ? "name" : "hex8"
-            };
-        }
-        if ((match = matchers.hex6.exec(color)) || (match = matchers.hex6s.exec(color))) {
-            return {
-                r: parseIntFromHex(match[1]),
-                g: parseIntFromHex(match[2]),
-                b: parseIntFromHex(match[3]),
-                format: named ? "name" : "hex"
-            };
-        }
-        if ((match = matchers.hex3.exec(color)) || (match = matchers.hex3s.exec(color))) {
-            return {
-                r: parseIntFromHex(match[1] + '' + match[1]),
-                g: parseIntFromHex(match[2] + '' + match[2]),
-                b: parseIntFromHex(match[3] + '' + match[3]),
-                format: named ? "name" : "hex"
-            };
-        }
-
-        return false;
     }
 
     // Given a string or object, convert that input to RGB
@@ -1173,7 +1158,7 @@ define('skylark-graphics-colors/parse',[
     //     "hsla(0, 100%, 50%, 1)" or "hsla 0 100% 50%, 1"
     //     "hsv(0, 100%, 100%)" or "hsv 0 100% 100%"
     //
-    function parse(color) {
+    Color.parse = function (color) {
         if (color instanceof Color) {
             return color;
         }
@@ -1184,7 +1169,7 @@ define('skylark-graphics-colors/parse',[
         var format = false;
 
         if (typeof color == "string") {
-            color = stringInputToObject(color);
+            color = conversion.strToRgb(color);
         }
 
         if (typeof color == "object") {
@@ -1213,13 +1198,12 @@ define('skylark-graphics-colors/parse',[
             }
         }
 
-
         return new Color(
             {
                 ok: ok,
-                r: mathMin(255, mathMax(rgb.r, 0)),
-                g: mathMin(255, mathMax(rgb.g, 0)),
-                b: mathMin(255, mathMax(rgb.b, 0)),
+                r: Math.min(255, Math.max(rgb.r, 0)),
+                g: Math.min(255, Math.max(rgb.g, 0)),
+                b: Math.min(255, Math.max(rgb.b, 0)),
                 a: a
             },
             {
@@ -1251,14 +1235,13 @@ define('skylark-graphics-colors/parse',[
         return new Color(color, opts);
     };
     */
-
-    return colors.parse = Color.parse = parse;
-	
+    return colors.Color = Color;
 });
+
 define('skylark-graphics-colors/named',[
+	"./colors",
 	"./Color",
-	"./_names",
-	"./parse"
+	"./_names"
 ],function(
 	Color,
 	parse,
@@ -1270,95 +1253,12 @@ define('skylark-graphics-colors/named',[
 		named[name] = Color.parse(_names[name]);
 	}
 
-	return Color.named = named;
-});
-define('skylark-graphics-colors/misc',[
-	"./Color"
-],function(
-	Color
-){
-    // Utility Functions
-    // ---------------------
-
-    // Readability Functions
-    // ---------------------
-    // <http://www.w3.org/TR/AERT#color-contrast>
-
-    // `readability`
-    // Analyze the 2 colors and returns an object with the following properties:
-    //    `brightness`: difference in brightness between the two colors
-    //    `color`: difference in color/hue between the two colors
-    function readability(color1, color2) {
-        var c1 = color1;
-        var c2 = color2;
-        var rgb1 = c1.toRgb();
-        var rgb2 = c2.toRgb();
-        var brightnessA = c1.getBrightness();
-        var brightnessB = c2.getBrightness();
-        var colorDiff = (
-            Math.max(rgb1.r, rgb2.r) - Math.min(rgb1.r, rgb2.r) +
-            Math.max(rgb1.g, rgb2.g) - Math.min(rgb1.g, rgb2.g) +
-            Math.max(rgb1.b, rgb2.b) - Math.min(rgb1.b, rgb2.b)
-        );
-
-        return {
-            brightness: Math.abs(brightnessA - brightnessB),
-            color: colorDiff
-        };
-    }
-
-    // `readable`
-    // http://www.w3.org/TR/AERT#color-contrast
-    // Ensure that foreground and background color combinations provide sufficient contrast.
-    // *Example*
-    //    Color.isReadable("#000", "#111") => false
-    function isReadable(color1, color2) {
-        var readability = readability(color1, color2);
-        return readability.brightness > 125 && readability.color > 500;
-    }
-
-    // `mostReadable`
-    // Given a base color and a list of possible foreground or background
-    // colors for that base, returns the most readable color.
-    // *Example*
-    //    Color.mostReadable("#123", ["#fff", "#000"]) => "#000"
-    function mostReadable(baseColor, colorList) {
-        var bestColor = null;
-        var bestScore = 0;
-        var bestIsReadable = false;
-        for (var i=0; i < colorList.length; i++) {
-
-            // We normalize both around the "acceptable" breaking point,
-            // but rank brightness constrast higher than hue.
-
-            var readability = readability(baseColor, colorList[i]);
-            var readable = readability.brightness > 125 && readability.color > 500;
-            var score = 3 * (readability.brightness / 125) + (readability.color / 500);
-
-            if ((readable && ! bestIsReadable) ||
-                (readable && bestIsReadable && score > bestScore) ||
-                ((! readable) && (! bestIsReadable) && score > bestScore)) {
-                bestIsReadable = readable;
-                bestScore = score;
-                bestColor = new Color(colorList[i]);
-            }
-        }
-        return bestColor;
-    }
-
-    return  {
-        readability,
-        isReadable,
-        mostReadable
-    };
-	
+	return colors.named = named;
 });
 define('skylark-graphics-colors/main',[
 	"./colors",
     "./Color",
-    "./named",
-    "./misc",
-    "./parse"
+    "./named"
 ], function(colors) {
 	return colors;
 });

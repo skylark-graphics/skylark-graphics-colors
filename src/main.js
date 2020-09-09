@@ -1,9 +1,7 @@
 define([
 	"./colors",
     "./Color",
-    "./named",
-    "./misc",
-    "./parse"
+    "./named"
 ], function(colors) {
 	return colors;
 });
