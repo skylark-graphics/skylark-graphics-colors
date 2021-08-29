@@ -1,0 +1,1 @@
+{"version":3,"sources":["hsv-to-rgb.js"],"names":["define","colors","conversion","hsvToRgb"],"mappings":";;;;;;;AAAAA,QACC,WACA,iBACC,SAASC,EAAOC,GACjB,OAAOD,EAAOE,SAAWD,EAAWC","file":"../hsv-to-rgb.js","sourcesContent":["define([\r\n\t\"./colors\",\r\n\t\"./_conversion\"\r\n],function(colors,conversion){\r\n\treturn colors.hsvToRgb\t= conversion.hsvToRgb;\r\n});"]}
