@@ -38,6 +38,7 @@ define([
     var Color = klass({
         init : function(rgb, opts) {
             opts = opts || { };
+            rgb = rgb || {r:0,g:0,b:0};
 
             //var rgb = inputToRGB(color);
             //
